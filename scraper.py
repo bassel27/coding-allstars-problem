@@ -21,78 +21,31 @@ from selenium.common.exceptions import *
 import requests
 from PIL import Image
 from langdetect import detect
+from base_scraping import BaseScraping
 
 
-class Scraper:
+class Tester(BaseScraping):
     def __init__(self):
-        self.driver = None
-        self.load_driver()
-
-    def load_driver(self):
-        chrome_options = Options()
-        chrome_options.add_experimental_option("detach", True)
-        chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        self.driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=chrome_options
-        )
-
-
-class Result:
-    def __init__(self, url: str, note: str = "", isPass: bool = True):
-        self.note = note
-        self.isPass = isPass
-        self.url = url
-
-    def __str__(self):
-        return f"{self.url}: \n{'Pass' if self.isPass else 'Fail'}: {self.note}"
-
-
-class Tester:
-    def __init__(self, url, driver: webdriver.Chrome):
-        self.url = url
-        self.result = Result(url)
-        self.driver = driver
+        super().__init__()
         self.wait = WebDriverWait(self.driver, WAIT_TIME)
 
-    def fetch_url(self, url):
-        self.driver.get(url)
+    @property
+    def url(self):
+        return self._url
 
-    def scroll_down_to_bottom(self):
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    @url.setter
+    def url(self, url):
+        self._url = url
+        self.result = Result(url)
 
-    def switch_to_main_window(self):
-        self.driver.switch_to.window(self.driver.window_handles[0])
-
-    def wait_until_page_fully_loaded(self):
-        self.wait.until(
-            lambda driver: driver.execute_script("return document.readyState")
-            == "complete"
-        )
-
-    def get_all_inner_pages(self):
-        links = []
-        for element in self.driver.find_elements_by_xpath("//a[@href]"):
-            if element.is_displayed():
-                link = element.get_attribute("href")
-                parsed_url = urlparse(self.driver.current_url)
-                base_url = parsed_url.scheme + "://" + parsed_url.netloc
-                if (
-                    link is not None
-                    and len(link) > 0
-                    and link not in links
-                    and base_url in link
-                ):
-                    links.append(link)
-        return links
-
-    def are_inner_pages_translated(self):
-        links = self.get_all_inner_pages()
+    def are_inner_pages_translated_to_hindi(self):
+        links = self.get_links_one_level_deep()
         if len(links) > 5:
-            links = random.sample(self.get_all_inner_pages(), 5)
+            links = random.sample(self.get_links_one_level_deep(), 5)
         self.open_link_in_new_tab(links[0])
         for link in links[1:]:
             self.fetch_url(link)
-            if not self.is_current_page_translated():
+            if not self.is_current_page_translated_to_hindi():
                 self.result.note += ", inner pages not translated"
                 self.result.isPass = False
                 print("This inner page is not translated:" + self.driver.current_url)
@@ -102,12 +55,7 @@ class Tester:
         self.result.note += ", inner pages are translated"
         return True
 
-    def close_current_tab_and_switch_to_first_tab(self):
-        self.driver.switch_to.window(self.driver.window_handles[-1])
-        self.driver.close()
-        self.driver.switch_to.window(self.driver.window_handles[-1])
-
-    def is_current_page_translated(self):
+    def is_current_page_translated_to_hindi(self):
         text = self.wait.until(
             EC.presence_of_element_located(
                 (
@@ -117,11 +65,6 @@ class Tester:
             )
         ).text
         return detect(text) == "hi"
-
-    def open_link_in_new_tab(self, link):
-        self.driver.execute_script("window.open('');")
-        self.driver.switch_to.window(self.driver.window_handles[-1])
-        self.driver.get(link)
 
     def is_right_page(self):
         # doc: don't wait unnecessarily if the page is wrong. Wait until page's fully loaded then check if elemnt exists
@@ -159,16 +102,6 @@ class Tester:
         self.result.note += ", images have a high resolution"
         return True
 
-    def has_image(self, image_url):
-        try:
-            response = requests.get(image_url)
-            img = Image.open(BytesIO(response.content))
-            img.save("img1.png", "PNG")
-            img.format
-            return img
-        except:
-            return None
-
     def is_image_blurry(self, img):
         rgba_image = img.convert("RGBA")
         gray_image = rgba_image.convert("L")
@@ -181,3 +114,13 @@ class Tester:
             return True
         else:
             return False
+
+
+class Result:
+    def __init__(self, url: str, note: str = "", isPass: bool = True):
+        self.note = note
+        self.isPass = isPass
+        self.url = url
+
+    def __str__(self):
+        return f"{self.url}: \n{'Pass' if self.isPass else 'Fail'}: {self.note}"
