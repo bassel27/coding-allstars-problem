@@ -23,7 +23,7 @@ from PIL import Image
 from langdetect import detect
 
 
-class BaseScraping:
+class BaseScraper:
     def __init__(self):
         self.driver = None
         self.load_driver()
@@ -32,6 +32,14 @@ class BaseScraping:
         chrome_options = Options()
         chrome_options.add_experimental_option("detach", True)
         chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+        chrome_options.add_argument("--headless")
+
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        prefs = {"profile.managed_default_content_settings.images": 2}
+        chrome_options.headless = True
+        chrome_options.add_experimental_option("prefs", prefs)
+
         self.driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()), options=chrome_options
         )
@@ -46,7 +54,11 @@ class BaseScraping:
         self.driver.switch_to.window(self.driver.window_handles[0])
 
     def fetch_url(self, url):
-        self.driver.get(url)
+        try:
+            self.driver.get(url)
+            return True
+        except WebDriverException:
+            return False
 
     def scroll_down_to_bottom(self):
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")

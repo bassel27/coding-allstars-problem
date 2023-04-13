@@ -29,12 +29,12 @@ FAIL_URLS = [
     "https://www.dqlab.id/",
     "https://drive.google.com/drive/folders/1eLU2AQ80bn89gYNC2HEIbrKswVzdj0qC?usp=sharing",
     "https://www.mediafire.com/folder/ktcts50c9o1up/Class_Central_-Website_translation",
-    "https://www.facebook.com/"
-    "https://a58-mohiuddin.github.io/developer_trial_task/web_translate.html"
-    "https://datta07.github.io/classcentralclone/"
-    "https://venerable-froyo-7f3b1e.netlify.app/university/cornell.html"
-    "https://muhammederenaslan.github.io/codingallstars/"
-    "https://exosmotic-bay.000webhostapp.com/"
-    "https://interviewdeneme123.000webhostapp.com/"
+    "https://www.facebook.com/",
+    "https://a58-mohiuddin.github.io/developer_trial_task/web_translate.html",
+    "https://datta07.github.io/classcentralclone/",
+    "https://venerable-froyo-7f3b1e.netlify.app/university/cornell.html",
+    "https://muhammederenaslan.github.io/codingallstars/",
+    "https://exosmotic-bay.000webhostapp.com/",
+    "https://interviewdeneme123.000webhostapp.com/",
     "https://codingallstarttest0000.on.drv.tw/www.teeest.blog/",
 ]
