@@ -1,14 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Test Results</title>
-    </head>
-    <body>
-        <h1>Test Results</h1>
-        <ul>
+
+<head>
+    <title>Test Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .pass {
+            color: green;
+        }
+
+        .fail {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Test Results</h1>
+    <ul>
         {% for result in results %}
-            <li>{{ result }}</li>
+        {% if result.passed %}
+        <li class="pass">{{ result.url }}: {{ result.message }}</li>
+        {% else %}
+        <li class="fail">{{ result.url }}: {{ result.message }}</li>
+        {% endif %}
         {% endfor %}
-        </ul>
-    </body>
+    </ul>
+</body>
+
 </html>

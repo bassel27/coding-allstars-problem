@@ -60,7 +60,7 @@ class Tester(BaseScraper):
 
     def is_current_page_translated_to_hindi(self):
         text = self.wait.until(
-            EC.presence_of_element_located(
+            EC.visibility_of_element_located(
                 (
                     By.TAG_NAME,
                     "body",
@@ -153,7 +153,6 @@ class Tester(BaseScraper):
         self.are_images_high_quality()
         self.are_inner_pages_translated_to_hindi()
         self.is_dropdown_working_correctly()
-        
 
 
 class Result:

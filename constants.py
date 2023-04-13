@@ -38,3 +38,6 @@ FAIL_URLS = [
     "https://interviewdeneme123.000webhostapp.com/",
     "https://codingallstarttest0000.on.drv.tw/www.teeest.blog/",
 ]
+
+# http://classcent.infinityfreeapp.com/
+# http://mihir.testing-phase.com/
