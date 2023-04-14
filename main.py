@@ -10,6 +10,7 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 SECRET = os.getenv("SECRET")
 
+
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
