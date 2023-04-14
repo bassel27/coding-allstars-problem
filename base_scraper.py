@@ -29,20 +29,22 @@ class BaseScraper:
         self.load_driver()
 
     def load_driver(self):
+        self.driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()),
+            options=self.get_chrome_options(),
+        )
+
+    def get_chrome_options(self):
         chrome_options = Options()
         chrome_options.add_experimental_option("detach", True)
         chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
         chrome_options.add_argument("--headless")
-
-        # chrome_options.add_argument("--no-sandbox")
-        # chrome_options.add_argument("--disable-dev-shm-usage")
-        # prefs = {"profile.managed_default_content_settings.images": 2}
-        # chrome_options.headless = True
-        # chrome_options.add_experimental_option("prefs", prefs)
-
-        self.driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=chrome_options
-        )
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        prefs = {"profile.managed_default_content_settings.images": 2}
+        chrome_options.headless = True
+        chrome_options.add_experimental_option("prefs", prefs)
+        return chrome_options
 
     def wait_until_page_fully_loaded(self):
         self.wait.until(
