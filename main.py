@@ -3,11 +3,12 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from sse_starlette.sse import EventSourceResponse
 from fastapi.templating import Jinja2Templates
 from tester import Tester
+import os
 
 tester = Tester()
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
-
+SECRET = os.getenv("SECRET")
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
