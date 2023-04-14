@@ -67,7 +67,7 @@ class BaseScraper:
 
     def get_links_one_level_deep(self):
         links = []
-        for element in self.driver.find_elements_by_xpath("//a[@href]"):
+        for element in self.driver.find_elements(By.XPATH, "//a[@href]"):
             if element.is_displayed():
                 link = element.get_attribute("href")
                 parsed_url = urlparse(self.driver.current_url)
