@@ -2,7 +2,6 @@ WAIT_TIME = 10
 CLASS_CENTRAL_XPATH = (
     '//i[@class="symbol-classcentral-navy symbol-medium hidden large-up-block"]'
 )
-WEBSITE_TITLE = "क्लास सेंट्रल • सर्वश्रेष्ठ पाठ्यक्रम खोजें, चाहे वे कहीं भी हों।"
 PASS_URLS = [
     "https://omarkhalifa97.github.io/khalifaaaz.github.io/",
     "https://classcentral-scrape-hindi.vercel.app/",
